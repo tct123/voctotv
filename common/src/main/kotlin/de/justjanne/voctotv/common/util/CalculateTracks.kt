@@ -8,11 +8,6 @@ const val FilterKeyOther = "Other"
 fun calculateTracks(
     conference: ConferenceModel,
     lecture: LectureModel,
-): List<String> {
-    val tags =
-        lecture.tags
-            .filter { !it.all(Char::isDigit) }
-            .filter { !it.startsWith("${conference.acronym}-") }
-            .filter { it != conference.acronym }
-    return tags.ifEmpty { listOf(FilterKeyOther) }
-}
+): List<String> = lecture.tags
+    .filter { filterTag(conference, it) }
+    .ifEmpty { listOf(FilterKeyOther) }
