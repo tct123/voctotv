@@ -11,7 +11,7 @@ private val gpnTalkId = "[0-9A-Z]{6}".toRegex()
 
 fun filterTag(
     conference: ConferenceModel,
-    tag: String
+    tag: String,
 ): Boolean {
     if (tag.matches(talkId)) return false
     if (tag.matches(gpnTalkId)) return false

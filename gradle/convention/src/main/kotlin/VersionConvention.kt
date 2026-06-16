@@ -17,9 +17,9 @@ class VersionConvention : Plugin<Project> {
 
             extensions.configure<BasePluginExtension> {
                 if (name == null) {
-                    archivesName.set("${rootProject.name}")
+                    archivesName.set("${rootProject.name}-${project.name}")
                 } else {
-                    archivesName.set("${rootProject.name}-$name")
+                    archivesName.set("${rootProject.name}-${project.name}-$name")
                 }
             }
 
