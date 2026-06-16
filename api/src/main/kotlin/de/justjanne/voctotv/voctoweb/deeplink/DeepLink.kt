@@ -36,7 +36,7 @@ sealed class DeepLink(
             companion object {
                 val Regex = "/v/(?<slug>[^/]+)/?".toRegex()
 
-                fun match(url: String) =
+                fun match(url: String): Show? =
                     Regex
                         .matchEntire(url)
                         ?.let {
@@ -53,7 +53,7 @@ sealed class DeepLink(
             companion object {
                 val Regex = "/postroll/(?<slug>[^/]+)/?".toRegex()
 
-                fun match(url: String) =
+                fun match(url: String): Postroll? =
                     Regex
                         .matchEntire(url)
                         ?.let {
@@ -70,7 +70,7 @@ sealed class DeepLink(
             companion object {
                 val Regex = "/v/(?<slug>[^/]+)/oembed/?".toRegex()
 
-                fun match(url: String) =
+                fun match(url: String): OEmbed? =
                     Regex
                         .matchEntire(url)
                         ?.let {
@@ -87,7 +87,7 @@ sealed class DeepLink(
             companion object {
                 val Regex = "/v/(?<slug>[^/]+)/playlist/?".toRegex()
 
-                fun match(url: String) =
+                fun match(url: String): Playlist? =
                     Regex
                         .matchEntire(url)
                         ?.let {
@@ -104,7 +104,7 @@ sealed class DeepLink(
             companion object {
                 val Regex = "/v/(?<slug>[^/]+)/audio/?".toRegex()
 
-                fun match(url: String) =
+                fun match(url: String): Audio? =
                     Regex
                         .matchEntire(url)
                         ?.let {
@@ -121,7 +121,7 @@ sealed class DeepLink(
             companion object {
                 val Regex = "/v/(?<slug>[^/]+)/related/?".toRegex()
 
-                fun match(url: String) =
+                fun match(url: String): Related? =
                     Regex
                         .matchEntire(url)
                         ?.let {
@@ -140,7 +140,7 @@ sealed class DeepLink(
             companion object {
                 val Regex = "/c/(?<acronym>[^/]+)/?".toRegex()
 
-                fun match(url: String) =
+                fun match(url: String): Show? =
                     Regex
                         .matchEntire(url)
                         ?.let {
@@ -158,7 +158,7 @@ sealed class DeepLink(
             companion object {
                 val Regex = "/c/(?<acronym>[^/]+)/(?<tag>[^/]+)/?".toRegex()
 
-                fun match(url: String) =
+                fun match(url: String): DeepLink.Conferences.Tag? =
                     Regex
                         .matchEntire(url)
                         ?.let {
@@ -201,7 +201,7 @@ sealed class DeepLink(
         companion object {
             val Regex = "/popular/(?<year>[^/]+)(?:.html)?/?".toRegex()
 
-            fun match(url: String) =
+            fun match(url: String): PopularByYear? =
                 Regex
                     .matchEntire(url)
                     ?.let {
@@ -224,7 +224,7 @@ sealed class DeepLink(
         companion object {
             val Regex = "/unpopular/(?<year>[^/]+(?:.html)?)".toRegex()
 
-            fun match(url: String) =
+            fun match(url: String): UnpopularByYear? =
                 Regex
                     .matchEntire(url)
                     ?.let {
@@ -241,7 +241,7 @@ sealed class DeepLink(
         companion object {
             val Regex = "/tags/(?<tag>[^/]+)(?:.html)?/?".toRegex()
 
-            fun match(url: String) =
+            fun match(url: String): Tag? =
                 Regex
                     .matchEntire(url)
                     ?.let {

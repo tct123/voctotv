@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild("gradle/convention")
     repositories {
         google {
             content {

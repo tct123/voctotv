@@ -3,42 +3,25 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.ktlint)
-}
-
-configure<BasePluginExtension> {
-    archivesName.set("${rootProject.name}-$name")
+    id("justjanne.version")
 }
 
 android {
     namespace = "de.justjanne.voctotv.tv"
-    compileSdk = 36
-
-    fun Project.git(vararg command: String): Provider<String> =
-        providers
-            .exec { commandLine("git", *command) }
-            .standardOutput
-            .asText
-            .map { it.trim() }
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "de.justjanne.voctotv"
-        minSdk = 26
-        targetSdk = 36
-        versionCode = git("rev-list", "--count", "HEAD", "--tags")
-            .orNull
-            ?.toIntOrNull()
-            ?.times(2) ?: 1
-        versionName = git("describe", "--always", "--tags", "HEAD").getOrElse("0.1.0")
 
-        configure<BasePluginExtension> {
-            archivesName.set("${rootProject.name}-$name-$versionName")
-        }
+        minSdk = 26
+        targetSdk = 37
+
+        versionCode = versionCode?.times(2)?.plus(0) ?: 1
     }
 
     buildFeatures {
@@ -82,7 +65,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             if (signingConfigs.names.contains("release")) {
                 signingConfig = signingConfigs.getByName("release")
@@ -129,7 +113,10 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.tv.foundation)
+
+    implementation(libs.androidx.material)
     implementation(libs.androidx.tv.material)
+
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     androidTestImplementation(platform(libs.androidx.compose.bom))

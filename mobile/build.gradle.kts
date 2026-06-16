@@ -3,39 +3,25 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.ktlint)
+    id("justjanne.version")
 }
 
 android {
     namespace = "de.justjanne.voctotv.mobile"
-    compileSdk = 36
-
-    fun Project.git(vararg command: String): Provider<String> =
-        providers
-            .exec { commandLine("git", *command) }
-            .standardOutput
-            .asText
-            .map { it.trim() }
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "de.justjanne.voctotv"
-        minSdk = 26
-        targetSdk = 36
-        versionCode = git("rev-list", "--count", "HEAD", "--tags")
-            .orNull
-            ?.toIntOrNull()
-            ?.times(2)
-            ?.plus(1) ?: 1
-        versionName = git("describe", "--always", "--tags", "HEAD").getOrElse("0.1.0")
 
-        configure<BasePluginExtension> {
-            archivesName.set("${rootProject.name}-$name-$versionName")
-        }
+        minSdk = 26
+        targetSdk = 37
+
+        versionCode = versionCode?.times(2)?.plus(1) ?: 1
     }
 
     buildFeatures {
@@ -79,7 +65,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             if (signingConfigs.names.contains("release")) {
                 signingConfig = signingConfigs.getByName("release")
@@ -89,10 +76,6 @@ android {
         debug {
             applicationIdSuffix = ".debug"
         }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
     }
 
     buildFeatures {
@@ -134,6 +117,7 @@ dependencies {
 
     implementation(libs.androidx.splashscreen)
 
+    implementation(libs.androidx.material)
     implementation(libs.androidx.material3)
 
     implementation(libs.androidx.paging)
