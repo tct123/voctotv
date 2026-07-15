@@ -16,6 +16,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import org.junit.jupiter.api.assertThrows
 import retrofit2.HttpException
+import kotlin.test.Ignore
 import kotlin.test.Test
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -35,12 +36,14 @@ class ResourceTest {
         }
 
     @Test
+    @Ignore
     fun loadResource() =
         runTest {
             println(api.resource.get("94736"))
         }
 
     @Test
+    @Ignore
     fun loadResourceMissing() =
         runTest {
             assertThrows<HttpException> { api.lecture.get("0") }

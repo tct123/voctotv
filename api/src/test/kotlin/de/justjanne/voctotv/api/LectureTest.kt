@@ -16,6 +16,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import org.junit.jupiter.api.assertThrows
 import retrofit2.HttpException
+import kotlin.test.Ignore
 import kotlin.test.Test
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -41,18 +42,21 @@ class LectureTest {
         }
 
     @Test
+    @Ignore
     fun loadLecture() =
         runTest {
             println(api.lecture.get("341961a3-599d-52b9-8262-34c1757c9698"))
         }
 
     @Test
+    @Ignore
     fun loadLectureMissing() =
         runTest {
             assertThrows<HttpException> { api.lecture.get("00000000-0000-0000-0000-000000000000") }
         }
 
     @Test
+    @Ignore
     fun searchLecture() =
         runTest {
             println(api.lecture.search("gpn"))

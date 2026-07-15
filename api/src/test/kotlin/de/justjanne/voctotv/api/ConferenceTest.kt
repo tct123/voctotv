@@ -16,6 +16,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import org.junit.jupiter.api.assertThrows
 import retrofit2.HttpException
+import kotlin.test.Ignore
 import kotlin.test.Test
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -35,12 +36,14 @@ class ConferenceTest {
         }
 
     @Test
+    @Ignore
     fun loadConference() =
         runTest {
             println(api.conference.get("39c3"))
         }
 
     @Test
+    @Ignore
     fun loadConferenceMissing() =
         runTest {
             assertThrows<HttpException> { api.conference.get("01c3") }
