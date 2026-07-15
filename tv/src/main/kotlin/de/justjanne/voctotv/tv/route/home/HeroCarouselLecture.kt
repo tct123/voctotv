@@ -6,6 +6,7 @@ import androidx.compose.ui.util.fastJoinToString
 import androidx.navigation3.runtime.NavKey
 import androidx.tv.material3.Card
 import androidx.tv.material3.CardDefaults
+import androidx.tv.material3.CardScale
 import androidx.tv.material3.Text
 import coil3.compose.rememberAsyncImagePainter
 import de.justjanne.voctotv.common.viewmodel.FeaturedItem
@@ -27,6 +28,7 @@ fun HeroCarouselLecture(
                 focusedContainerColor = HeroCarouselDefaults.BackgroundColor,
                 pressedContainerColor = HeroCarouselDefaults.BackgroundColor,
             ),
+        scale = CardScale.None,
     ) {
         val background = rememberAsyncImagePainter(item.lecture.posterUrl)
         HeroCarouselContent(
