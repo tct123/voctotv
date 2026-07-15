@@ -28,6 +28,7 @@ data class ConferenceModel(
     @SerialName("description") val description: String? = null,
     @SerialName("webgen_location") val webgenLocation: String,
     @SerialName("logo_url") val logoUrl: String,
+    @SerialName("banner_url") val bannerUrl: String? = null,
     @SerialName("images_url") val imagesUrl: String,
     @SerialName("recordings_url") val recordingsUrl: String,
     @SerialName("url") val url: String,

@@ -27,7 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
+import de.justjanne.voctotv.common.ConferenceLogo
 import de.justjanne.voctotv.voctoweb.model.ConferenceModel
 
 @Composable
@@ -50,16 +50,14 @@ fun ConferenceItem(
                     .align(Alignment.CenterVertically)
                     .width(120.dp)
                     .aspectRatio(16f / 9f)
-                    .clip(MaterialTheme.shapes.extraSmall)
-                    .background(MaterialTheme.colorScheme.onSurface),
+                    .clip(MaterialTheme.shapes.extraSmall),
         ) {
-            AsyncImage(
-                model = item.logoUrl,
-                contentDescription = null,
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(8.dp),
+            ConferenceLogo(
+                item,
+                Modifier.fillMaxSize(),
+                Modifier
+                    .background(MaterialTheme.colorScheme.inverseSurface)
+                    .padding(8.dp),
             )
         }
         Column(Modifier.align(Alignment.CenterVertically), verticalArrangement = Arrangement.Center) {

@@ -7,6 +7,7 @@
 
 package de.justjanne.voctotv.tv.route.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,17 +23,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusRestorer
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import androidx.tv.material3.Card
+import androidx.tv.material3.CardDefaults
+import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.StandardCardContainer
 import androidx.tv.material3.Text
-import coil3.compose.AsyncImage
+import de.justjanne.voctotv.common.ConferenceLogo
 import de.justjanne.voctotv.tv.Routes
 import de.justjanne.voctotv.tv.ui.theme.GridGutter
 import de.justjanne.voctotv.tv.ui.theme.GridPadding
-import de.justjanne.voctotv.tv.ui.theme.VoctoTvTheme
 import de.justjanne.voctotv.voctoweb.model.ConferenceModel
 
 @Composable
@@ -54,25 +57,26 @@ fun ConferenceRow(
 
             Column {
                 StandardCardContainer(
-                    modifier = modifier.width(124.dp),
+                    modifier = modifier.width(192.dp),
                     imageCard = { interactionSource ->
-                        VoctoTvTheme(isInDarkTheme = false) {
-                            Card(
-                                onClick = { navigate(Routes.Conference(conference.acronym)) },
-                                modifier =
-                                    Modifier
-                                        .aspectRatio(16f / 9),
-                                interactionSource = interactionSource,
-                            ) {
-                                AsyncImage(
-                                    model = conference.logoUrl,
-                                    contentDescription = conference.title,
-                                    modifier =
-                                        Modifier
-                                            .fillMaxSize()
-                                            .padding(8.dp),
-                                )
-                            }
+                        Card(
+                            onClick = { navigate(Routes.Conference(conference.acronym)) },
+                            modifier = Modifier.width(192.dp).aspectRatio(16f / 9f),
+                            interactionSource = interactionSource,
+                            colors =
+                                CardDefaults.colors(
+                                    containerColor = Color.Transparent,
+                                    focusedContainerColor = Color.Transparent,
+                                    pressedContainerColor = Color.Transparent,
+                                ),
+                        ) {
+                            ConferenceLogo(
+                                conference,
+                                Modifier.fillMaxSize(),
+                                Modifier
+                                    .background(MaterialTheme.colorScheme.inverseSurface)
+                                    .padding(8.dp),
+                            )
                         }
                     },
                     title = {
