@@ -27,7 +27,7 @@ data class LiveConferenceModel(
     @SerialName("keywords")
     val keywords: String,
     @SerialName("schedule")
-    val schedule: String,
+    val schedule: String? = null,
     @SerialName("startsAt")
     val startsAt: Timestamp,
     @SerialName("endsAt")
