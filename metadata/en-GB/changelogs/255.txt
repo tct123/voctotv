@@ -1,0 +1,4 @@
+VoctoTV is in beta, please submit feedback if you encounter any bugs
+
+Fixed empty conference & live view during gpn24
+Improved conference icons
