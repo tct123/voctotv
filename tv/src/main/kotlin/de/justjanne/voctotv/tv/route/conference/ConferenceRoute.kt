@@ -20,12 +20,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
@@ -37,6 +33,7 @@ import de.justjanne.voctotv.tv.ui.LectureCard
 import de.justjanne.voctotv.tv.ui.theme.GridGutter
 import de.justjanne.voctotv.tv.ui.theme.GridPadding
 import de.justjanne.voctotv.tv.ui.theme.textShadow
+import de.justjanne.voctotv.tv.ui.util.WithRestorableFocus
 
 @Composable
 fun ConferenceRoute(
@@ -46,7 +43,7 @@ fun ConferenceRoute(
     val conference by viewModel.conference.collectAsState()
     val popular by viewModel.popular.collectAsState()
     val recent by viewModel.recent.collectAsState()
-    val itemsByTrack by viewModel.itemsByTrack.collectAsState()
+    val itemsByTrack by viewModel.tracks.collectAsState()
 
     LazyColumn(
         verticalArrangement = Arrangement.Top,
@@ -80,18 +77,19 @@ fun ConferenceRoute(
                 modifier = Modifier.padding(horizontal = GridGutter),
             )
 
-            val focusRequester = remember("recent") { FocusRequester() }
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(GridPadding),
-                contentPadding = PaddingValues(horizontal = GridGutter, vertical = GridPadding),
-                modifier = Modifier.focusRestorer(focusRequester),
-            ) {
-                itemsIndexed(recent, key = { _, lecture -> lecture.guid }) { index, lecture ->
-                    LectureCard(
-                        lecture,
-                        navigate,
-                        if (index == 0) Modifier.focusRequester(focusRequester) else Modifier,
-                    )
+            WithRestorableFocus(recent.size) {
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(GridPadding),
+                    contentPadding = PaddingValues(horizontal = GridGutter, vertical = GridPadding),
+                    modifier = Modifier.restorableFocusGroup(),
+                ) {
+                    itemsIndexed(recent, key = { _, lecture -> lecture.guid }) { index, lecture ->
+                        LectureCard(
+                            lecture,
+                            navigate,
+                            Modifier.restorableFocusItem(index)
+                        )
+                    }
                 }
             }
         }
@@ -102,40 +100,42 @@ fun ConferenceRoute(
                 modifier = Modifier.padding(horizontal = GridGutter),
             )
 
-            val focusRequester = remember("popular") { FocusRequester() }
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(GridPadding),
-                contentPadding = PaddingValues(horizontal = GridGutter, vertical = GridPadding),
-                modifier = Modifier.focusRestorer(focusRequester),
-            ) {
-                itemsIndexed(popular, key = { _, lecture -> lecture.guid }) { index, lecture ->
-                    LectureCard(
-                        lecture,
-                        navigate,
-                        if (index == 0) Modifier.focusRequester(focusRequester) else Modifier,
-                    )
+            WithRestorableFocus(popular.size) {
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(GridPadding),
+                    contentPadding = PaddingValues(horizontal = GridGutter, vertical = GridPadding),
+                    modifier = Modifier.restorableFocusGroup(),
+                ) {
+                    itemsIndexed(popular, key = { _, lecture -> lecture.guid }) { index, lecture ->
+                        LectureCard(
+                            lecture,
+                            navigate,
+                            Modifier.restorableFocusItem(index)
+                        )
+                    }
                 }
             }
         }
 
-        items(itemsByTrack.entries.sortedBy { it.key }.toList(), key = { it.key }) { (track, items) ->
+        items(itemsByTrack, key = { it.first }) { (track, items) ->
             Text(
                 track,
                 modifier = Modifier.padding(horizontal = GridGutter),
             )
 
-            val focusRequester = remember(track) { FocusRequester() }
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(GridPadding),
-                contentPadding = PaddingValues(horizontal = GridGutter, vertical = GridPadding),
-                modifier = Modifier.focusRestorer(focusRequester),
-            ) {
-                itemsIndexed(items, key = { _, lecture -> lecture.guid }) { index, lecture ->
-                    LectureCard(
-                        lecture,
-                        navigate,
-                        if (index == 0) Modifier.focusRequester(focusRequester) else Modifier,
-                    )
+            WithRestorableFocus(items.size) {
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(GridPadding),
+                    contentPadding = PaddingValues(horizontal = GridGutter, vertical = GridPadding),
+                    modifier = Modifier.restorableFocusGroup(),
+                ) {
+                    itemsIndexed(items, key = { _, lecture -> lecture.guid }) { index, lecture ->
+                        LectureCard(
+                            lecture,
+                            navigate,
+                            Modifier.restorableFocusItem(index),
+                        )
+                    }
                 }
             }
         }

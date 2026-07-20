@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -42,6 +42,7 @@ import de.justjanne.voctotv.tv.R
 import de.justjanne.voctotv.tv.ui.LectureCard
 import de.justjanne.voctotv.tv.ui.theme.GridGutter
 import de.justjanne.voctotv.tv.ui.theme.GridPadding
+import de.justjanne.voctotv.tv.ui.util.WithRestorableFocus
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
@@ -49,7 +50,7 @@ fun HomeRoute(
     viewModel: HomeViewModel,
     navigate: (NavKey) -> Unit,
 ) {
-    val conferences by viewModel.conferences.collectAsState()
+    val categories by viewModel.categories.collectAsState()
     val recent by viewModel.recentResult.collectAsState()
     val popular by viewModel.popularResult.collectAsState()
     val featuredItems by viewModel.featuredItems.collectAsState()
@@ -95,18 +96,19 @@ fun HomeRoute(
                     modifier = Modifier.padding(horizontal = GridGutter),
                 )
 
-                val focusRequester = remember("recent") { FocusRequester() }
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(GridPadding),
-                    contentPadding = PaddingValues(vertical = GridPadding, horizontal = GridGutter),
-                    modifier = Modifier.focusRestorer(focusRequester),
-                ) {
-                    itemsIndexed(recent, key = { _, lecture -> lecture.guid }) { index, lecture ->
-                        LectureCard(
-                            lecture,
-                            navigate,
-                            if (index == 0) Modifier.focusRequester(focusRequester) else Modifier,
-                        )
+                WithRestorableFocus(recent.size) {
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(GridPadding),
+                        contentPadding = PaddingValues(vertical = GridPadding, horizontal = GridGutter),
+                        modifier = Modifier.restorableFocusGroup(),
+                    ) {
+                        itemsIndexed(recent, key = { _, lecture -> lecture.guid }) { index, lecture ->
+                            LectureCard(
+                                lecture,
+                                navigate,
+                                Modifier.restorableFocusItem(index),
+                            )
+                        }
                     }
                 }
             }
@@ -119,41 +121,46 @@ fun HomeRoute(
                     modifier = Modifier.padding(horizontal = GridGutter),
                 )
 
-                val focusRequester = remember("popular") { FocusRequester() }
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(GridPadding),
-                    contentPadding = PaddingValues(vertical = GridPadding, horizontal = GridGutter),
-                    modifier = Modifier.focusRestorer(focusRequester),
-                ) {
-                    itemsIndexed(popular, key = { _, lecture -> lecture.guid }) { index, lecture ->
-                        LectureCard(
-                            lecture,
-                            navigate,
-                            if (index == 0) Modifier.focusRequester(focusRequester) else Modifier,
-                        )
+                WithRestorableFocus(popular.size) {
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(GridPadding),
+                        contentPadding = PaddingValues(
+                            vertical = GridPadding,
+                            horizontal = GridGutter
+                        ),
+                        modifier = Modifier.restorableFocusGroup(),
+                    ) {
+                        itemsIndexed(
+                            popular,
+                            key = { _, lecture -> lecture.guid }) { index, lecture ->
+                            LectureCard(
+                                lecture,
+                                navigate,
+                                Modifier.restorableFocusItem(index),
+                            )
+                        }
                     }
                 }
             }
         }
 
-        for (kind in ConferenceKind.entries) {
-            val lectures = conferences[kind].orEmpty()
-            if (lectures.isNotEmpty()) {
-                item(kind) {
-                    ConferenceRow(
-                        when (kind) {
-                            ConferenceKind.CONGRESS -> stringResource(R.string.category_congress)
-                            ConferenceKind.GPN -> stringResource(R.string.category_gpn)
-                            ConferenceKind.CONFERENCE -> stringResource(R.string.category_conference)
-                            ConferenceKind.DOCUMENTARIES -> stringResource(R.string.category_documentary)
-                            ConferenceKind.ERFA -> stringResource(R.string.category_erfa)
-                            ConferenceKind.OTHER -> stringResource(R.string.category_other)
-                        },
-                        lectures,
-                        navigate,
-                    )
-                }
-            }
+        items(categories, key = { (category, _) -> category }) { (category, entries) ->
+            ConferenceRow(
+                categoryTitle(category),
+                entries,
+                navigate,
+            )
         }
     }
 }
+
+@Composable
+private fun categoryTitle(category: ConferenceKind): String =
+    when (category) {
+        ConferenceKind.CONGRESS -> stringResource(R.string.category_congress)
+        ConferenceKind.GPN -> stringResource(R.string.category_gpn)
+        ConferenceKind.CONFERENCE -> stringResource(R.string.category_conference)
+        ConferenceKind.DOCUMENTARIES -> stringResource(R.string.category_documentary)
+        ConferenceKind.ERFA -> stringResource(R.string.category_erfa)
+        ConferenceKind.OTHER -> stringResource(R.string.category_other)
+    }

@@ -19,13 +19,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
@@ -36,6 +31,7 @@ import de.justjanne.voctotv.tv.ui.LiveRoomCardCard
 import de.justjanne.voctotv.tv.ui.theme.GridGutter
 import de.justjanne.voctotv.tv.ui.theme.GridPadding
 import de.justjanne.voctotv.tv.ui.theme.textShadow
+import de.justjanne.voctotv.tv.ui.util.WithRestorableFocus
 
 @Composable
 fun LiveConferenceRoute(
@@ -77,18 +73,22 @@ fun LiveConferenceRoute(
                     modifier = Modifier.padding(horizontal = GridGutter),
                 )
 
-                val focusRequester = remember(group) { FocusRequester() }
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(GridPadding),
-                    contentPadding = PaddingValues(horizontal = GridGutter, vertical = GridPadding),
-                    modifier = Modifier.focusRestorer(focusRequester),
-                ) {
-                    itemsIndexed(group.rooms, key = { _, room -> room.id() }) { index, room ->
-                        LiveRoomCardCard(
-                            room,
-                            navigate,
-                            if (index == 0) Modifier.focusRequester(focusRequester) else Modifier,
-                        )
+                WithRestorableFocus(group.rooms.size) {
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(GridPadding),
+                        contentPadding = PaddingValues(
+                            horizontal = GridGutter,
+                            vertical = GridPadding
+                        ),
+                        modifier = Modifier.restorableFocusGroup(),
+                    ) {
+                        itemsIndexed(group.rooms, key = { _, room -> room.id() }) { index, room ->
+                            LiveRoomCardCard(
+                                room,
+                                navigate,
+                                Modifier.restorableFocusItem(index)
+                            )
+                        }
                     }
                 }
             }

@@ -8,7 +8,6 @@
 package de.justjanne.voctotv.tv.route.home
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,11 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
@@ -33,6 +28,7 @@ import de.justjanne.voctotv.tv.Routes
 import de.justjanne.voctotv.tv.ui.theme.GridGutter
 import de.justjanne.voctotv.tv.ui.theme.GridPadding
 import de.justjanne.voctotv.tv.ui.theme.VoctoTvTheme
+import de.justjanne.voctotv.tv.ui.util.WithRestorableFocus
 import de.justjanne.voctotv.voctoweb.model.VideoModel
 
 @Composable
@@ -41,26 +37,24 @@ fun LiveRow(
     rooms: List<VideoModel.Live>,
     navigate: (NavKey) -> Unit,
 ) {
-    val focusRequester = remember { FocusRequester() }
-
     Text(title, modifier = Modifier.padding(horizontal = GridGutter))
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(GridPadding),
-        contentPadding = PaddingValues(vertical = GridPadding, horizontal = GridGutter),
-        modifier = Modifier.focusRestorer(focusRequester),
-    ) {
-        itemsIndexed(rooms, key = { _, item -> item.room.id() }) { index, item ->
-            val modifier = if (index == 0) Modifier.focusRequester(focusRequester) else Modifier
 
-            Column {
+    WithRestorableFocus(rooms.size) {
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(GridPadding),
+            contentPadding = PaddingValues(vertical = GridPadding, horizontal = GridGutter),
+            modifier = Modifier.restorableFocusGroup(),
+        ) {
+            itemsIndexed(rooms, key = { _, item -> item.room.id() }) { index, item ->
                 StandardCardContainer(
-                    modifier = modifier.width(124.dp),
+                    modifier = Modifier.width(124.dp),
                     imageCard = { interactionSource ->
                         VoctoTvTheme(isInDarkTheme = false) {
                             Card(
                                 onClick = { navigate(Routes.PlayerLive(item.room.id())) },
                                 modifier =
                                     Modifier
+                                        .restorableFocusItem(index)
                                         .aspectRatio(16f / 9),
                                 interactionSource = interactionSource,
                             ) {

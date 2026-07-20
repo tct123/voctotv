@@ -9,7 +9,6 @@ package de.justjanne.voctotv.tv.route.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,11 +17,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -36,32 +32,34 @@ import de.justjanne.voctotv.common.ConferenceLogo
 import de.justjanne.voctotv.tv.Routes
 import de.justjanne.voctotv.tv.ui.theme.GridGutter
 import de.justjanne.voctotv.tv.ui.theme.GridPadding
+import de.justjanne.voctotv.tv.ui.util.WithRestorableFocus
 import de.justjanne.voctotv.voctoweb.model.ConferenceModel
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ConferenceRow(
     title: String,
-    featured: List<ConferenceModel>,
+    items: List<ConferenceModel>,
     navigate: (NavKey) -> Unit,
 ) {
-    val focusRequester = remember { FocusRequester() }
-
     Text(title, modifier = Modifier.padding(horizontal = GridGutter))
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(GridPadding),
-        contentPadding = PaddingValues(vertical = GridPadding, horizontal = GridGutter),
-        modifier = Modifier.focusRestorer(focusRequester),
-    ) {
-        itemsIndexed(featured, key = { _, item -> item.acronym }) { index, conference ->
-            val modifier = if (index == 0) Modifier.focusRequester(focusRequester) else Modifier
 
-            Column {
+    WithRestorableFocus(items.size) {
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(GridPadding),
+            contentPadding = PaddingValues(vertical = GridPadding, horizontal = GridGutter),
+            modifier = Modifier.restorableFocusGroup()
+        ) {
+            itemsIndexed(items, key = { _, item -> item.acronym }) { index, conference ->
                 StandardCardContainer(
-                    modifier = modifier.width(192.dp),
+                    modifier = Modifier.width(192.dp),
                     imageCard = { interactionSource ->
                         Card(
                             onClick = { navigate(Routes.Conference(conference.acronym)) },
-                            modifier = Modifier.width(192.dp).aspectRatio(16f / 9f),
+                            modifier = Modifier
+                                .restorableFocusItem(index)
+                                .width(192.dp)
+                                .aspectRatio(16f / 9f),
                             interactionSource = interactionSource,
                             colors =
                                 CardDefaults.colors(
