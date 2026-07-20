@@ -87,7 +87,7 @@ fun ConferenceRoute(
                         LectureCard(
                             lecture,
                             navigate,
-                            Modifier.restorableFocusItem(index)
+                            Modifier.restorableFocusItem(index),
                         )
                     }
                 }
@@ -110,7 +110,7 @@ fun ConferenceRoute(
                         LectureCard(
                             lecture,
                             navigate,
-                            Modifier.restorableFocusItem(index)
+                            Modifier.restorableFocusItem(index),
                         )
                     }
                 }

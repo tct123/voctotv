@@ -48,7 +48,7 @@ fun ConferenceRow(
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(GridPadding),
             contentPadding = PaddingValues(vertical = GridPadding, horizontal = GridGutter),
-            modifier = Modifier.restorableFocusGroup()
+            modifier = Modifier.restorableFocusGroup(),
         ) {
             itemsIndexed(items, key = { _, item -> item.acronym }) { index, conference ->
                 StandardCardContainer(
@@ -56,10 +56,11 @@ fun ConferenceRow(
                     imageCard = { interactionSource ->
                         Card(
                             onClick = { navigate(Routes.Conference(conference.acronym)) },
-                            modifier = Modifier
-                                .restorableFocusItem(index)
-                                .width(192.dp)
-                                .aspectRatio(16f / 9f),
+                            modifier =
+                                Modifier
+                                    .restorableFocusItem(index)
+                                    .width(192.dp)
+                                    .aspectRatio(16f / 9f),
                             interactionSource = interactionSource,
                             colors =
                                 CardDefaults.colors(

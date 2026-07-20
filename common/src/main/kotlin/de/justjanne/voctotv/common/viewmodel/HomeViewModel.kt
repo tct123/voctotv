@@ -68,11 +68,11 @@ class HomeViewModel
                         .mapValues { it.value.sortedByDescending { it.eventLastReleasedAt?.toEpochSecond() ?: 0 } }
                 }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyMap())
 
-
         val categories: StateFlow<List<Pair<ConferenceKind, List<ConferenceModel>>>> =
             conferences
                 .map {
-                    it.toList()
+                    it
+                        .toList()
                         .sortedBy { it.first }
                         .filter { it.second.isNotEmpty() }
                 }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())

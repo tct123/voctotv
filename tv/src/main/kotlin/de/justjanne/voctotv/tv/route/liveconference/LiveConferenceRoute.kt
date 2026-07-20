@@ -76,17 +76,18 @@ fun LiveConferenceRoute(
                 WithRestorableFocus(group.rooms.size) {
                     LazyRow(
                         horizontalArrangement = Arrangement.spacedBy(GridPadding),
-                        contentPadding = PaddingValues(
-                            horizontal = GridGutter,
-                            vertical = GridPadding
-                        ),
+                        contentPadding =
+                            PaddingValues(
+                                horizontal = GridGutter,
+                                vertical = GridPadding,
+                            ),
                         modifier = Modifier.restorableFocusGroup(),
                     ) {
                         itemsIndexed(group.rooms, key = { _, room -> room.id() }) { index, room ->
                             LiveRoomCardCard(
                                 room,
                                 navigate,
-                                Modifier.restorableFocusItem(index)
+                                Modifier.restorableFocusItem(index),
                             )
                         }
                     }

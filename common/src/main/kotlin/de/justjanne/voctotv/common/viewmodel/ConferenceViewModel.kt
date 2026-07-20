@@ -77,9 +77,10 @@ class ConferenceViewModel
                 }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyMap())
 
         val tracks: StateFlow<List<Pair<String, List<LectureModel>>>> =
-            itemsByTrack.map {
-                it.toList().sortedBy { it.first }
-            }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+            itemsByTrack
+                .map {
+                    it.toList().sortedBy { it.first }
+                }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
         val currentFilter = MutableStateFlow<String?>(null)
 

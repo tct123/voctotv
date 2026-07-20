@@ -124,15 +124,17 @@ fun HomeRoute(
                 WithRestorableFocus(popular.size) {
                     LazyRow(
                         horizontalArrangement = Arrangement.spacedBy(GridPadding),
-                        contentPadding = PaddingValues(
-                            vertical = GridPadding,
-                            horizontal = GridGutter
-                        ),
+                        contentPadding =
+                            PaddingValues(
+                                vertical = GridPadding,
+                                horizontal = GridGutter,
+                            ),
                         modifier = Modifier.restorableFocusGroup(),
                     ) {
                         itemsIndexed(
                             popular,
-                            key = { _, lecture -> lecture.guid }) { index, lecture ->
+                            key = { _, lecture -> lecture.guid },
+                        ) { index, lecture ->
                             LectureCard(
                                 lecture,
                                 navigate,
