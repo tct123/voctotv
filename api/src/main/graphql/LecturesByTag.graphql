@@ -1,0 +1,28 @@
+query LecturesByTag($tag: String!, $orderBy: LectureOrderBy = viewCount_DESC, $first: Int = 25, $offset: Int = 0) {
+    lectures(filter: { tagsContains: [$tag]}, first: $first, offset: $offset, orderBy: $orderBy) {
+        conference {
+            acronym
+        }
+        date
+        #description
+        duration
+        guid
+        images {
+            posterUrl
+            thumbUrl
+        }
+        link
+        localId
+        originalLanguage
+        persons
+        promoted
+        releaseDate
+        slug
+        subtitle
+        tags
+        title
+        updatedAt
+        url
+        viewCount
+    }
+}

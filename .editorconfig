@@ -17,3 +17,8 @@ ij_kotlin_name_count_to_use_star_import_for_members = 999
 
 ktlint_function_naming_ignore_when_annotated_with = Composable
 ktlint_property_naming_constant_naming = pascal_case
+
+[**/generated/**]
+generated_code = true
+ij_formatter_enabled = false
+ktlint = disabled

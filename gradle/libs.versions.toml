@@ -3,6 +3,7 @@ agp = "9.2.1"
 kotlin = "2.4.0"
 ksp = "2.3.9"
 daggerHilt = "2.60.1"
+apollo = "5.0.1"
 
 ktlint = "14.2.0"
 
@@ -96,6 +97,8 @@ dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", vers
 dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "daggerHilt" }
 kotlin-metadata-jvm = { group = "org.jetbrains.kotlin", name = "kotlin-metadata-jvm", version.ref = "kotlin" }
 
+apollo-runtime = { group = "com.apollographql.apollo", name = "apollo-runtime", version.ref = "apollo" }
+
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 
 [plugins]
@@ -107,3 +110,4 @@ kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", vers
 dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+apollo = { id = "com.apollographql.apollo", version.ref = "apollo" }

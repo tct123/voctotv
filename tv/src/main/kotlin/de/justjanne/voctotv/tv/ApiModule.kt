@@ -8,6 +8,7 @@
 package de.justjanne.voctotv.tv
 
 import android.content.Context
+import com.apollographql.apollo.ApolloClient
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
@@ -33,6 +34,12 @@ internal object ApiModule {
     fun provideVodEndpoint(
         @ApplicationContext context: Context,
     ): String = context.resources.getString(R.string.api_url_vod)
+
+    @Provides
+    @Named("endpointGraphQL")
+    fun provideGraphQLEndpoint(
+        @ApplicationContext context: Context,
+    ): String = context.resources.getString(R.string.api_url_graphql)
 
     @Provides
     @Named("endpointLive")
@@ -64,6 +71,16 @@ internal object ApiModule {
                 .build()
         return VoctowebApi.build(vod, live)
     }
+
+    @Provides
+    @Reusable
+    fun provideGraphQLClient(
+        @Named("endpointGraphQL") endpointGraphQL: String,
+    ): ApolloClient =
+        ApolloClient
+            .Builder()
+            .serverUrl(endpointGraphQL)
+            .build()
 
     @Provides
     @Reusable

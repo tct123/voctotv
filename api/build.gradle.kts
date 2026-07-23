@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.apollo)
 }
 
 java {
@@ -18,6 +19,12 @@ kotlin {
     }
 }
 
+apollo {
+    service("service") {
+        packageName.set("de.justjanne.voctotv.voctoweb.graphql")
+    }
+}
+
 dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.coroutines.core)
@@ -26,6 +33,8 @@ dependencies {
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.kotlinx.serialization)
     testImplementation(libs.okhttp.logging)
+
+    implementation(libs.apollo.runtime)
 
     testImplementation(kotlin("test"))
     testImplementation(libs.junit.jupiter.api)

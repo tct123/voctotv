@@ -1,0 +1,571 @@
+"""
+This entity groups multiple lectures together, e.g. a Conference or Lecture Series
+"""
+type Conference {
+  """
+  The acronym of this conference, used as its identifier
+  """
+  acronym: String!
+
+  """
+  The aspect ratio of the conference's recordings
+  """
+  aspectRatio: String!
+
+  """
+  The conference's description
+  """
+  description: String
+
+  """
+  Identifies the date and time when a event was last released
+  """
+  eventLastReleasedAt: DateTime
+  id: ID!
+
+  """
+  A URL pointing to the root of all image files of this conference
+  """
+  imagesUrl: URL!
+  lectures(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): LectureConnection
+
+  """
+  A URL pointing to the conference's own website
+  """
+  link: URL
+
+  """
+  A URL pointing to the conference's logo
+  """
+  logoUrl: URL
+
+  """
+  A URL pointing to the root of all recording files of this conference
+  """
+  recordingsUrl: URL!
+
+  """
+  A URL pointing to the conference's frab xml schedule
+  """
+  scheduleUrl: URL
+
+  """
+  The URL slug of this conference
+  """
+  slug: String!
+
+  """
+  The title of this conference
+  """
+  title: String!
+
+  """
+  Identifies the date and time when the object was last updated
+  """
+  updatedAt: DateTime!
+
+  """
+  A URL pointing to the conference page in vocotweb frontend
+  """
+  url: URL!
+}
+
+"""
+The connection type for Conference.
+"""
+type ConferenceConnection {
+  """
+  A list of edges.
+  """
+  edges: [ConferenceEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [Conference]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+}
+
+"""
+An edge in a connection.
+"""
+type ConferenceEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: Conference
+}
+
+input ConferenceFilter {
+  OR: [ConferenceFilter!]
+  currentlyStreaming: Boolean
+  urlContains: String
+}
+
+enum ConferenceOrderBy {
+  createdAt_ASC
+  createdAt_DESC
+}
+
+"""
+An ISO 8601-encoded datetime
+"""
+scalar DateTime
+
+"""
+A untyped JSON document
+"""
+scalar JSON
+
+"""
+This entity is an Event with multiple Files e.g. Video and Audio recordings,
+subtitles (SRT) as well as PDFs e.g. the lecture slides
+"""
+type Lecture {
+  audios: [Resource!]
+
+  """
+  The conference this event belongs to
+  """
+  conference: Conference!
+
+  """
+  Identifies the date and time when the event took place
+  """
+  date: DateTime
+
+  """
+  The event's description
+  """
+  description: String
+
+  """
+  Digital Object Identifier (DOI) e.g. https://doi.org/10.5446/19566
+  """
+  doiUrl: URL
+
+  """
+  The lecture recording duration in seconds
+  """
+  duration: Int
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): ResourceConnection!
+  guid: ID!
+  images: LectureImage
+
+  """
+  URL pointing to the conference event website
+  """
+  link: URL
+  localId: Int!
+
+  """
+  The event's original language, encoded as ISO 639-2
+  """
+  originalLanguage: String
+
+  """
+  Names of persons that held the event
+  """
+  persons: [String!]
+  playerConfig: JSON
+
+  """
+  Whether the event is promoted right now
+  """
+  promoted: Boolean
+
+  """
+  Identifies the date when the event got released
+  """
+  releaseDate: DateTime
+  relive: JSON
+  slides: [Resource!]
+
+  """
+  The URL slug of this event
+  """
+  slug: URL!
+
+  """
+  The event's subtitle that may be displayed below the title
+  """
+  subtitle: String
+  subtitles: [Resource!]
+
+  """
+  Tags/keywords describing the event
+  """
+  tags: [String!]
+  timelens: LectureTimelens
+
+  """
+  The title of this event
+  """
+  title: String!
+
+  """
+  Identifies the date and time when the object was last updated
+  """
+  updatedAt: DateTime
+
+  """
+  A URL pointing to this lecture's page in vocotweb frontend
+  """
+  url: URL!
+  videoPreferred: Resource!
+  videos: [Resource!]!
+
+  """
+  The amount of views of this event
+  """
+  viewCount: Int
+}
+
+"""
+The connection type for Lecture.
+"""
+type LectureConnection {
+  """
+  A list of edges.
+  """
+  edges: [LectureEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [Lecture]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+}
+
+"""
+An edge in a connection.
+"""
+type LectureEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: Lecture
+}
+
+input LectureFilter {
+  OR: [LectureFilter!]
+  tagsContains: [String!]
+}
+
+type LectureImage {
+  """
+  URL pointing to a preview/poster image of the event
+  """
+  posterUrl: URL
+
+  """
+  URL pointing to a smaller version of the poster image
+  """
+  thumbUrl: URL
+}
+
+enum LectureOrderBy {
+  date_ASC
+  date_DESC
+  viewCount_ASC
+  viewCount_DESC
+}
+
+type LectureTimelens {
+  """
+  URL pointing to scrubbing thumbnails for timelens/timeline
+  """
+  thumbnailsUrl: URL
+
+  """
+  URL pointing timelens timline image of the event
+  """
+  timelineUrl: URL
+}
+
+"""
+Information about pagination in a connection.
+"""
+type PageInfo {
+  """
+  When paginating forwards, the cursor to continue.
+  """
+  endCursor: String
+
+  """
+  When paginating forwards, are there more items?
+  """
+  hasNextPage: Boolean!
+
+  """
+  When paginating backwards, are there more items?
+  """
+  hasPreviousPage: Boolean!
+
+  """
+  When paginating backwards, the cursor to continue.
+  """
+  startCursor: String
+}
+
+"""
+Files like videos, audios, SRTs or PDFs
+"""
+type Resource {
+  """
+  The recordings's duration in seconds
+  """
+  duration: Int!
+  filename: String!
+
+  """
+  The height of this recording in px, if it is a video
+  """
+  height: Int!
+
+  """
+  Whether this recording is a video with at least 720p resolution
+  """
+  highQuality: Boolean!
+  label: String!
+
+  """
+  The recordings's language, encoded as ISO 639-2
+  """
+  language: String
+
+  """
+  The recordings's mime type, e.g. video/mp4
+  """
+  mimeType: String!
+
+  """
+  The recording's approximate size, in the unit given by `unit` (defaults to megabytes)
+  """
+  size(
+    """
+    The unit to express the size in
+    """
+    unit: SizeUnit = MB
+  ): Int!
+
+  """
+  Identifies the date and time when the object was last updated
+  """
+  updatedAt: DateTime!
+
+  """
+  A URL pointing to the CDN location of this recording
+  """
+  url: String!
+
+  """
+  The width of this recording in px, if it is a video
+  """
+  width: Int!
+}
+
+"""
+The connection type for Resource.
+"""
+type ResourceConnection {
+  """
+  A list of edges.
+  """
+  edges: [ResourceEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [Resource]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+}
+
+"""
+An edge in a connection.
+"""
+type ResourceEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: Resource
+}
+
+"""
+The unit a recording's size is expressed in
+"""
+enum SizeUnit {
+  """
+  Bytes
+  """
+  BYTE
+
+  """
+  Gigabytes
+  """
+  GB
+
+  """
+  Megabytes
+  """
+  MB
+}
+
+"""
+A valid URL, transported as a string
+"""
+scalar URL
+
+"""
+The sdl representing the federated service capabilities. Includes federation
+directives, removes federation types, and includes rest of full schema after
+schema directives have been applied
+"""
+type _Service {
+  sdl: String
+}
+
+type Query {
+    _service: _Service!
+
+    """
+    All conferences as Connection
+    """
+    allConferences(
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: String
+
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: String
+
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): ConferenceConnection
+
+    """
+    Find a conference by acronym
+    """
+    conference(id: ID!): Conference
+    conferences(filter: ConferenceFilter, first: Int, offset: Int, orderBy: ConferenceOrderBy = createdAt_DESC): [Conference!]!
+
+    """
+    All conferences as List, recent first
+    """
+    conferencesRecent(first: Int! = 5, offset: Int = 0): [Conference!]
+
+    """
+    Find a lecture by guid
+    """
+    lecture(guid: ID!): Lecture
+
+    """
+    Find a lecture by slug
+    """
+    lectureBySlug(slug: ID!): Lecture
+    lectureSearch(page: Int, query: String!): [Lecture!]!
+    lectures(filter: LectureFilter, first: Int, offset: Int, orderBy: LectureOrderBy = date_DESC): [Lecture!]!
+
+    """
+    A list of related lectures, ordered by decreasing relevance.
+    """
+    lecturesRelatedTo(
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: String
+
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: String
+
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        guid: ID!
+
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): LectureConnection
+}

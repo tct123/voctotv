@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlinx.serialization) apply false
     alias(libs.plugins.dagger.hilt) apply false
     alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.apollo) apply false
     alias(libs.plugins.ktlint)
 }
 

@@ -69,15 +69,31 @@ class PlayerVodViewModel
                     mediaSession.player.clearMediaItems()
 
                     if (video != null) {
+                        val tracks =
+                            video.lecture.resources
+                                ?.filter { it.mimeType.startsWith("video/") }
+                                ?.sortedByDescending { it.size }
                         val track =
-                            video.lecture.resources?.firstOrNull { it.mimeType == MimeTypes.VIDEO_MP4 && it.highQuality }
-                                ?: video.lecture.resources?.firstOrNull { it.mimeType == MimeTypes.VIDEO_MP4 }
+                            tracks?.firstOrNull {
+                                it.mimeType == MimeTypes.VIDEO_MP4 &&
+                                    it.highQuality &&
+                                    it.language?.contains(video.lecture.originalLanguage) == true
+                            } ?: tracks?.firstOrNull {
+                                it.mimeType == MimeTypes.VIDEO_MP4 && it.language?.contains(video.lecture.originalLanguage) == true
+                            } ?: tracks?.firstOrNull {
+                                it.language?.contains(video.lecture.originalLanguage) == true
+                            } ?: tracks?.firstOrNull {
+                                it.mimeType == MimeTypes.VIDEO_MP4 && it.highQuality
+                            } ?: tracks?.firstOrNull {
+                                it.mimeType == MimeTypes.VIDEO_MP4
+                            } ?: tracks?.firstOrNull()
+
                         if (track != null) {
                             mediaSession.player.apply {
                                 trackSelectionParameters =
                                     trackSelectionParameters
                                         .buildUpon()
-                                        .setPreferredAudioLanguages(video.lecture.originalLanguage ?: "")
+                                        .setPreferredAudioLanguages(video.lecture.originalLanguage)
                                         .setPreferredTextLanguages()
                                         .build()
                                 setMediaItem(buildMediaItem(video.lecture, track))

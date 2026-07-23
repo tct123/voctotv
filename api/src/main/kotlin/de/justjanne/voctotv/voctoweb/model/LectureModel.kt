@@ -43,6 +43,7 @@ data class LectureModel(
     @SerialName("conference_url") val conferenceUrl: String,
     @SerialName("related") val related: List<Related>,
     @SerialName("recordings") val resources: List<ResourceModel>? = null,
+    @SerialName("subtitles") val subtitles: List<ResourceModel>? = null,
 ) {
     @Serializable
     data class Related(

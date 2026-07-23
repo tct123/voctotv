@@ -148,6 +148,8 @@ dependencies {
     implementation(libs.coil.svg)
     implementation(libs.coil.network.okhttp)
 
+    implementation(libs.apollo.runtime)
+
     implementation(libs.dagger.hilt.android)
     ksp(libs.dagger.hilt.compiler)
 }

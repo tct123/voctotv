@@ -1,0 +1,59 @@
+query LectureBySlug($slug: ID!) {
+    lectureBySlug(slug: $slug) {
+        conference {
+            acronym
+            title
+        }
+        date
+        description
+        duration
+        guid
+        images {
+            posterUrl
+            thumbUrl
+        }
+        timelens {
+            thumbnailsUrl
+            timelineUrl
+        }
+        link
+        localId
+        originalLanguage
+        persons
+        promoted
+        releaseDate
+        slug
+        subtitle
+        subtitles {
+            duration
+            filename
+            height
+            highQuality
+            label
+            language
+            mimeType
+            size
+            updatedAt
+            url
+            width
+        }
+        tags
+        title
+        updatedAt
+        url
+        viewCount
+        videos {
+            duration
+            filename
+            height
+            highQuality
+            label
+            language
+            mimeType
+            size
+            updatedAt
+            url
+            width
+        }
+    }
+}
