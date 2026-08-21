@@ -29,11 +29,10 @@ A stylish new AndroidTV client for media.ccc.de.
 
 ### Smartphone
 
-<a href="metadata/screenshots/phone/seeking.png"><img src="metadata/screenshots/phone/seeking.png" width="640"></a>
-<a href="metadata/screenshots/phone/info1.png"><img src="metadata/screenshots/phone/info1.png" width="640"></a>
+<a href="metadata/en-GB/images/phoneScreenshots/1_en-GB.png"><img src="metadata/en-GB/images/phoneScreenshots/1_en-GB.png" width="640"></a>
+<a href="metadata/en-GB/images/phoneScreenshots/2_en-GB.png"><img src="metadata/en-GB/images/phoneScreenshots/2_en-GB.png" width="640"></a>
 
-<a href="metadata/screenshots/phone/home.png"><img src="metadata/screenshots/phone/home.png" width="320"></a>
-<a href="metadata/screenshots/phone/conference.png"><img src="metadata/screenshots/phone/conference.png" width="320"></a>
+<a href="metadata/en-GB/images/phoneScreenshots/3_en-GB.png"><img src="metadata/en-GB/images/phoneScreenshots/3_en-GB.png" width="640"></a>
 
 ## License
 
